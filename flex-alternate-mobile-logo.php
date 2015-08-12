@@ -11,7 +11,7 @@
 */
   
 /**
- * Copyright (c) 2015 Genesis Developer. All rights reserved.
+ * Copyright (c) 2015 www.simpleprothemes.com. All rights reserved.
  *
  * Released under the GPL license
  * http://www.opensource.org/licenses/gpl-license.php
@@ -35,53 +35,51 @@ class FAML_Customizer {
   }
   
   function flex_alternate_mobile_logo( $wp_customize ) {    
-    $wp_customize->add_setting( 'flex_alt_mobile_logo', array(
-			'default'  => '',
-			'type'     => 'option',
-      'sanitize_callback' => 'esc_url_raw',
-		) );    
+    $wp_customize->add_setting( 'flex_alt_mobile_logo', 
+    	array(
+		'default'  => '',
+		'type'     => 'option',
+      		'sanitize_callback' => 'esc_url_raw',
+	) );    
     
     $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 
-      'flex_alt_mobile_logo', 
-      array(
-  			'label'       => sprintf( __( 'Upload Alternate Mobile Logo:', 'faml' ), $image ),
-  			'section'     => 'header_image',
-  			'settings'    => 'flex_alt_mobile_logo',
-  			'description' => __( 'Upload your alternate mobile logo', 'faml' ),
-        'priority'    => 45,
-		  ) 
+      	'flex_alt_mobile_logo', 
+      	array(
+  		'label'       => sprintf( __( 'Upload Alternate Mobile Logo:', 'faml' ), $image ),
+  		'section'     => 'header_image',
+  		'settings'    => 'flex_alt_mobile_logo',
+  		'description' => __( 'Upload your alternate mobile logo', 'faml' ),
+        	'priority'    => 45,
+	) 
     ) );
     
     $wp_customize->add_setting(
-			'breakpoint',
-			array(
-				'default' => '425',
-				'type'    => 'option',
-        'sanitize_callback' => 'absint',
-			)
-		);
+	'breakpoint',
+	array(
+		'default' => '425',
+		'type'    => 'option',
+        	'sanitize_callback' => 'absint',
+	));
     
     $wp_customize->add_control(
-			'breakpoint',
-			array(
-				'label'    => __( 'Enter a breakpoint', 'faml'),
-				'section'  => 'header_image',
-				'settings' => 'breakpoint',
-        'description' => __( 'Enter the integer value. It will genarate @media queries.', 'faml' ),
-				'type'     => 'text',
-        'priority' => 50,
-			)
-		);
+	'breakpoint',
+	array(
+		'label'    => __( 'Enter a breakpoint', 'faml'),
+		'section'  => 'header_image',
+		'settings' => 'breakpoint',
+        	'description' => __( 'Enter the integer value. It will genarate @media queries.', 'faml' ),
+		'type'     => 'text',
+        	'priority' => 50,
+	));
         
   }
 }
 
 add_action( 'init', 'flex_alternate_mobile_logo_init' );
 function flex_alternate_mobile_logo_init() {
-  global $faml;
+	global $faml;
 	$faml = new FAML_Customizer();
-  
-  add_action( 'customize_register' , array( $faml , 'register' ) );
+	add_action( 'customize_register' , array( $faml , 'register' ) );
 }
 
 add_filter( 'genesis_seo_title', 'flex_alternate_mobile_logo', 12, 3 );
@@ -101,31 +99,31 @@ function flex_alternate_mobile_logo( $title, $inside, $wrap ) {
 
 add_action( 'wp_head', 'faml_media_queries' );
 function faml_media_queries() {
-  $breakpoint = get_option('breakpoint', 425);
-  $mobile_logo_url = get_option('flex_alt_mobile_logo');
-  
-  if ( ! empty( $mobile_logo_url ) && ( ! empty( $breakpoint ) ) ) {
-    
-    $css = '
-      #mobile-logo {
-        display: none;
-      }
-      @media only screen and (max-width: ' . $breakpoint . 'px) {
-        #logo,
-        #rlogo {
-          display: none;
-        }
-        
-        #mobile-logo {
-          display: block;
-        }
-      }
-    ';
-    /** Minify a bit */
-		$css = str_replace( "\t", '', $css );
-		$css = str_replace( array( "\n", "\r" ), ' ', $css );
-
-		/** Echo the CSS */
-		echo '<style type="text/css" media="screen">' . $css . '</style>';
+	$breakpoint = get_option('breakpoint', 425);
+	$mobile_logo_url = get_option('flex_alt_mobile_logo');
+	
+	if ( ! empty( $mobile_logo_url ) && ( ! empty( $breakpoint ) ) ) {
+	
+	$css = '
+	#mobile-logo {
+		display: none;
+	}
+	@media only screen and (max-width: ' . $breakpoint . 'px) {
+		#logo,
+		#rlogo {
+			display: none;
+		}
+	
+		#mobile-logo {
+			display: block;
+		}
+	}
+	';
+	/** Minify a bit */
+	$css = str_replace( "\t", '', $css );
+	$css = str_replace( array( "\n", "\r" ), ' ', $css );
+	
+	/** Echo the CSS */
+	echo '<style type="text/css" media="screen">' . $css . '</style>';
   } 
 }
